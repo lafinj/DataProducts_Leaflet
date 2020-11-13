@@ -1,0 +1,43 @@
+---
+title: "Cancer centers in Nigeria"
+author: "John Lafin"
+date: "11/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, message=FALSE}
+library(tidyverse)
+library(leaflet)
+```
+
+The Nigerian National Cancer Control Plan describes the development of 8 public comprehensive cancer centers. Here, using location data from [Knapp et al](https://ascopubs.org/doi/full/10.1200/JGO.19.00283), we display the location of these 8 cancer centers, along with circles demonstrating a 100-mile radius around each. 
+
+```{r}
+cancer_centers <- data.frame(lat = c(6.3906, 11.8259, 7.4020, 
+                                     6.5178, 6.2992, 11.08342, 
+                                     13.0355, 8.9528), 
+                             lng = c(5.6131, 13.1809, 3.9022, 
+                                     3.3536, 7.4598, 7.713622, 
+                                     5.2230, 7.0623), 
+                             popup = c('University of Benin Teaching Hospital',
+                                       'University of Maiduguri Teaching Hospital',
+                                       'University College Hospital, Ibadan',
+                                       'Lagos State University Teaching Hospital',
+                                       'Enugu University of Nigeria Teaching Hospital',
+                                       'Ahmadu Bello University Teaching Hospital',
+                                       'Usmanu Danfodio University Teaching Hospital',
+                                       'University Teaching Hospital Abuja'))
+
+m <- leaflet(data = cancer_centers) %>%
+  addTiles() %>%
+  addMarkers(~lng, ~lat, popup = ~popup) %>%
+  addCircles(~lng, ~lat, weight = 1, radius = 100 * 1.609 * 1000)
+
+m
+```
+
+In the above linked report, Knapp et al report that nearly 70% of Nigerians can access a comprehensive cancer center within 4 hours of vehicular travel. However, only 31.4% of Nigerians living in the North East have 4-hour access. The authors suggest that the addition of another center in either Bauchi or Gombe would provide more accessible care to these people. This map demonstrates that there is limited care available in this region, and supports the authors suggestion.
